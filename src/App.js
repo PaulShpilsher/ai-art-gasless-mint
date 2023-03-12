@@ -1,10 +1,31 @@
 import { useState } from "react";
 import axios from "axios";
 
+
 function App() {
   const [prompt, setPrompt] = useState("");
+  const [imageBlob, setImageBlob] = useState(null);
+  const generateArt = async () => {
+    try {
+      const response = await axios.post(
+        `https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_HUGGING_FACE}}`,
+          },
+          method: "POST",
+          inputs: prompt,
+        },
+        { responseType: "blob" }
+      );
+      const url = URL.createObjectURL(response.data);
+      console.log(url);
+      setImageBlob(url);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  console.log(prompt);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4">
@@ -17,7 +38,12 @@ function App() {
           type="text"
           placeholder="Enter a prompt"
         />
-        <button className="bg-black text-white rounded-md p-2">Next</button>
+        <button onClick={generateArt} className="bg-black text-white rounded-md p-2">Next</button>
+      </div>
+      <div>
+        {
+          imageBlob && <img src={imageBlob} alt={`AI generated art of "${prompt}"`} />
+        }
       </div>
     </div>
   );
