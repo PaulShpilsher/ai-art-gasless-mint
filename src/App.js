@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { NFTStorage } from "nft.storage";
 
 function App() {
   const [prompt, setPrompt] = useState("");
@@ -29,6 +30,24 @@ function App() {
       const url = URL.createObjectURL(response.data);
       console.log(url);
       setImageBlob(url);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const uploadArtToIpfs = async () => {
+    try {
+      const nftstorage = new NFTStorage({
+        token: process.env.REACT_APP_NFT_STORAGE,
+      });
+
+      const store = await nftstorage.store({
+        name: "AI NFT",
+        description: "AI generated NFT",
+        image: file,
+      });
+
+      console.log(store);
     } catch (err) {
       console.error(err);
     }
