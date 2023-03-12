@@ -2,6 +2,12 @@ import { useState } from "react";
 import axios from "axios";
 import { NFTStorage } from "nft.storage";
 
+const cleanupIfpsImageHref = (url) => {
+  if (url.includes("ipfs://")) {
+    return url.replace("ipfs://", "https://ipfs.io/ipfs/");
+  }
+};
+
 function App() {
   const [prompt, setPrompt] = useState("");
   const [imageBlob, setImageBlob] = useState(null);
@@ -48,8 +54,12 @@ function App() {
       });
 
       console.log(store);
+      const imageUrl = cleanupIfpsImageHref(store.data.image.href);
+      console.log(imageUrl);
+      return imageUrl;
     } catch (err) {
       console.error(err);
+      return null;
     }
   };
 
