@@ -74,8 +74,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### Using 3rd party
 
 https://huggingface.co
-ps
+
 https://nft.storage
-t_c
+
 https://www.nftport.xyz/
-t_c
