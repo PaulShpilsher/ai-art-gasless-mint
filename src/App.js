@@ -42,8 +42,8 @@ function App() {
       });
 
       const store = await nftstorage.store({
-        name: "AI NFT",
-        description: `AI generated NFT of "${prompt}"`,
+        name: `AI NFT: "${prompt}"`,
+        description: `AI generated NFT of "${prompt.toLowerCase()}"`,
         image: file,
       });
 
