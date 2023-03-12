@@ -48,20 +48,46 @@ function App() {
       });
 
       const store = await nftstorage.store({
-        name: `AI NFT: "${prompt}"`,
+        name: `AI NFT: "${prompt.toLowerCase()}"`,
         description: `AI generated NFT of "${prompt.toLowerCase()}"`,
         image: file,
       });
 
       console.log(store);
-      const imageUrl = convertUriIfpsToHttps(store.data.image.href);
-      console.log(imageUrl);
-      return imageUrl;
+      return convertUriIfpsToHttps(store.data.image.href);
     } catch (err) {
       console.error(err);
       return null;
     }
   };
+
+  const mintNft = async () => {
+    try {
+      const imageURL = await uploadArtToIpfs();
+  
+      // mint as an NFT on nftport
+      const response = await axios.post(
+        `https://api.nftport.xyz/v0/mints/easy/urls`,
+        {
+          file_url: imageURL,
+          chain: "polygon",
+          name: `AI NFT: "${prompt.toLowerCase()}"`,
+          description: `AI generated NFT of "${prompt.toLowerCase()}"`,
+          mint_to_address: "0xb8Dfff92aa9A06A0CfF733D6cd1B62a560B622ef",
+        },
+        {
+          headers: {
+            Authorization: process.env.REACT_APP_NFT_PORT,
+          }
+        }
+      );
+      const data = await response.data;
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-4">
@@ -86,7 +112,7 @@ function App() {
           <div className="flex flex-col gap-4 items-center justify-center">
             <img src={imageBlob} alt={`AI generated art of "${prompt}"`} />
             <button
-              onClick={uploadArtToIpfs}
+              onClick={mintNft}
               className="bg-black text-white rounded-md p-2"
             >
               Upload to IPFS
