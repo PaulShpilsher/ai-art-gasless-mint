@@ -43,7 +43,7 @@ function App() {
 
       const store = await nftstorage.store({
         name: "AI NFT",
-        description: "AI generated NFT",
+        description: `AI generated NFT of "${prompt}"`,
         image: file,
       });
 
@@ -73,7 +73,15 @@ function App() {
       </div>
       <div>
         {imageBlob && (
-          <img src={imageBlob} alt={`AI generated art of "${prompt}"`} />
+          <div className="flex flex-col gap-4 items-center justify-center">
+            <img src={imageBlob} alt={`AI generated art of "${prompt}"`} />
+            <button
+              onClick={uploadArtToIpfs}
+              className="bg-black text-white rounded-md p-2"
+            >
+              Upload to IPFS
+            </button>
+          </div>
         )}
       </div>
     </div>
